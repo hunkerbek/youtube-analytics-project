@@ -17,6 +17,24 @@ class Channel:
         self.__channel_id = channel_id
         self.__response = Channel.youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
 
+    def __str__(self):
+        return f'{self.title} ({self.url})'
+
+    def __add__(self, other):
+        return self.subscriberCount + other.subscriberCount
+
+    def __sub__(self, other):
+        return self.subscriberCount - other.subscriberCount
+
+    def __eq__(self, other):
+        return self.subscriberCount == other.subscriberCount
+
+    def __gt__(self, other):
+        return self.subscriberCount > other.subscriberCount
+
+    def __ge__(self, other):
+        return self.subscriberCount >= other.subscriberCount
+
     @property
     def channel_id(self):
         return self.__channel_id
