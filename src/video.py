@@ -42,7 +42,7 @@ class PLVideo(Video):
                                                videoId=video_id
                                                ).execute()
 
-        if int(response["pageInfo"]["totalResults"]) == 1:
+        if int(response["pageInfo"]["totalResults"])   == 1:
             super().__init__(video_id)
 
         else:
