@@ -5,10 +5,18 @@ class Video(YoutubeObject):
 
     def __init__(self, video_id: str) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
+
         self.__video_id = video_id
-        self.__response = Video.youtube.videos().list(part='snippet,statistics',
+        try:
+            self.__response = Video.youtube.videos().list(part='snippet,statistics',
                                                       id=video_id
                                                       ).execute()
+            if not self.__response["items"]:
+                self.__response = None
+
+        except Exception:
+            self.__response=None
+
 
     def __str__(self):
         return self.title
@@ -19,18 +27,30 @@ class Video(YoutubeObject):
 
     @property
     def title(self):
+        if self.__response is None:
+            return None
+
         return self.__response["items"][0]["snippet"]["title"]
 
     @property
     def url(self):
+        if self.__response is None:
+            return None
+
         return f"https://youtu.be/{self.__video_id}"
 
     @property
-    def viewCount(self):
+    def view_count(self):
+        if self.__response is None:
+            return None
+
         return int(self.__response["items"][0]["statistics"]["viewCount"])
 
     @property
-    def likeCount(self):
+    def like_count(self):
+        if self.__response is None:
+            return None
+
         return int(self.__response["items"][0]["statistics"]["likeCount"])
 
 
